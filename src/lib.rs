@@ -98,7 +98,7 @@ pub fn main_with_args(opt: Opt) {
         chunk_size = payload_size;
     }
 
-    while cursor < payload_size as u64 {
+    while cursor < payload_size {
         if cursor + chunk_size > payload_size {
             chunk_size -= cursor + chunk_size - payload_size;
         }
