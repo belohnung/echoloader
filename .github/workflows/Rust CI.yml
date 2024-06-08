@@ -9,9 +9,11 @@ on:
     branches:
       - main
       - dev
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
-
   fmt:
     name: Rustfmt
     runs-on: ubuntu-latest
