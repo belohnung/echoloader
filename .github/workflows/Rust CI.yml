@@ -9,33 +9,39 @@ on:
     branches:
       - main
       - dev
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
-
   fmt:
     name: Rustfmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
         with:
-          toolchain: stable
-          override: true
-          components: rustfmt
-      - name: Format code
+          node-version: '20'
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install rustfmt
+        run: rustup component add rustfmt
+      - name: Run rustfmt
         run: cargo fmt --all -- --check
 
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
         with:
-          toolchain: stable
-          override: true
-          components: clippy
-      - name: Lint with clippy
+          node-version: '20'
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install clippy
+        run: rustup component add clippy
+      - name: Run clippy
         run: cargo clippy --all-targets --all-features -- -D warnings
 
   build:
@@ -44,7 +50,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache cargo registry
         uses: actions/cache@v2
@@ -58,12 +64,14 @@ jobs:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Set up Rust
+      - name: Setup Rust
         uses: actions-rs/toolchain@v1
         with:
-          profile: minimal
           toolchain: stable
           override: true
+
+      - name: Install dependencies
+        run: cargo fetch
 
       - name: Build
         run: cargo build --verbose
