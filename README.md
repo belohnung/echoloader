@@ -45,7 +45,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Authors
 
-- **[belohnung](https://github.com/belohnung)
+- **[belohnung](https://github.com/belohnung)**
 
 ## License
 
